@@ -3,76 +3,29 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Test Recording</title>
-<style type="text/css">
-
-            body {
-  font: 14px "Open Sans", "Arial", sans-serif;
-}
-
-video {
-  margin-top: 2px;
-  border: 1px solid black;
-}
-
-.button {
-  cursor: pointer;
-  display: block;
-  width: 160px;
-  border: 1px solid black;
-  font-size: 16px;
-  text-align: center;
-  padding-top: 2px;
-  padding-bottom: 4px;
-  color: white;
-  background-color: darkgreen;
-  text-decoration: none;
-}
-
-h2 {
-  margin-bottom: 4px;
-}
-
-.left {
-  margin-right: 10px;
-  float: left;
-  width: 160px;
-  padding: 0px;
-}
-
-.right {
-  margin-left: 10px;
-  float: left;
-  width: 160px;
-  padding: 0px;
-}
-
-.bottom {
-  clear: both;
-  padding-top: 10px;
-}
-
-        
-        </style>		
+		<link rel="stylesheet" href="style.css">
 	</head>
+
 	<body>
-		<div class="left">
-		  <div id="startButton" class="button">Start</div>
+		<header>
+			<h1>Second life / 2036</h1>
+		</header>
+		<div class="content">
 		  <h2>Preview</h2>
-		  <video id="preview" width="160" height="120" autoplay muted></video>
-		</div>
-		<div class="right">
+		  <video id="preview" width="100%" autoplay muted></video>
+		  <div id="startButton" class="button">Start</div>
 			<div id="stopButton" class="button">
 			Stop
 		  </div>
 		  <h2>Recording</h2>
-		  <video id="recording" width="160" height="120" controls></video>
+		  <video id="recording" width="160" height="120" controls style="display:none;"></video>
 		  <a id="downloadButton" class="button">
 			Download
 		  </a>
-		 </div>
 		 <div class="bottom">
 			<pre id="log"></pre>
 		 </div>
+	 </div>
 	</body>
 	<script>
 	let preview = document.getElementById("preview");
@@ -81,8 +34,8 @@ h2 {
 	let stopButton = document.getElementById("stopButton");
 	let downloadButton = document.getElementById("downloadButton");
 	let logElement = document.getElementById("log");
-	let recordingTimeMS = 10000;
-	
+	let recordingTimeMS = 300000;
+
 	function log(msg) {
 	logElement.innerHTML += msg + "\n";
 	}
@@ -97,7 +50,7 @@ h2 {
 
 	 recorder.ondataavailable = event => data.push(event.data);
 	 recorder.start();
-	 log(recorder.state + " : Enregistrement pendant " + (lengthInMS/1000) + " secondes...");
+	 log(recorder.state + " : Enregistrement pendant " + (lengthInMS/60000) + " minutes...");
 
 	let stopped = new Promise((resolve, reject) => {
     recorder.onstop = resolve;
@@ -114,10 +67,10 @@ h2 {
 	])
 	.then(() => data);
 	}
-	
+
 	function stop(stream) {
 	stream.getTracks().forEach(track => track.stop());
-	
+
 	log("Enregistrement terminé. Formatage de la vidéo (veuillez patienter)...");
 	}
 
@@ -133,6 +86,8 @@ h2 {
 	}).then(() => startRecording(preview.captureStream(), recordingTimeMS))
 	.then (recordedChunks => {
     let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+		recording.style = "display:inline-block";
+		preview.style = "display:none;"
     recording.src = URL.createObjectURL(recordedBlob);
     downloadButton.href = recording.src;
     downloadButton.download = "RecordedVideo.webm";
@@ -142,7 +97,7 @@ h2 {
 	})
 	.catch(log);
 	}, false);
-	
+
 	stopButton.addEventListener("click", function() {
 	stop(preview.srcObject);
 	}, false);
