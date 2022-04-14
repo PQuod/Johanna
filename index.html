@@ -14,25 +14,25 @@
 			<div id="preview-content">
 			  <h2>Aperçu</h2>
 			  <video id="preview" width="100%" autoplay muted></video>
-			  <div id="startButton" class="button">Start</div>
-				<div id="stopButton" class="button">
+			  <div id="startButton" class="button border">Start</div>
+				<div id="stopButton" class="button border">
 				Stop
 			  </div>
 			</div>
-			<div id="recorded-content" style="display:none;">
+			<div id="recorded-content">
 			  <h2>Enregistrement</h2>
 			  <video id="recording" width="100%" controls></video>
-			  <a id="downloadButton" class="button">
+			  <a id="downloadButton" class="button border">
 				Download
 			  </a>
 				<form method="post" action="send.php">
 					<label for="mail">Adresse à laquelle envoyer le message dans X temps :</label>
-					<input type"email" name="email" required />
+					<input type"email" name="email" class="field" required />
 					<label for="nom">Votre nom :</label>
-					<input type ="text" name="nom" required/>
+					<input type ="text" name="nom" class="field" required/>
 					<label for="prenom">Votre prénom: </label>
-					<input type="text" name="prenom" required />
-					<input type="submit" value="Envoyer votre message"></input>
+					<input type="text" name="prenom" class="field" required />
+					<input type="submit" value="Envoyer votre message" class="submit button border">
 				</form>
 			</div>
 		 <div class="bottom">
@@ -88,7 +88,7 @@
 	function stop(stream) {
 	stream.getTracks().forEach(track => track.stop());
 
-	log("Enregistrement terminé. Formatage de la vidéo (veuillez patienter)... (Environ" + (lengthInMS/1000) + " secondes...");
+	log("Enregistrement terminé. Formatage de la vidéo (veuillez patienter) (Environ " + (lengthInMS/1000) + " secondes...");
 	}
 
 	startButton.addEventListener("click", function() {
@@ -108,7 +108,6 @@
     recording.src = URL.createObjectURL(recordedBlob);
     downloadButton.href = recording.src;
     downloadButton.download = "RecordedVideo.webm";
-
     log("Enregistrement terminé. " + recordedBlob.size + " bytes de média" +
 		recordedBlob.type);
 	})
