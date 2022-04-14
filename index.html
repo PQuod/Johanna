@@ -11,32 +11,49 @@
 			<h1>Second life / 2036</h1>
 		</header>
 		<div class="content">
-		  <h2>Preview</h2>
-		  <video id="preview" width="100%" autoplay muted></video>
-		  <div id="startButton" class="button">Start</div>
-			<div id="stopButton" class="button">
-			Stop
-		  </div>
-		  <h2>Recording</h2>
-		  <video id="recording" width="160" height="120" controls style="display:none;"></video>
-		  <a id="downloadButton" class="button">
-			Download
-		  </a>
+			<div id="preview-content">
+			  <h2>Aperçu</h2>
+			  <video id="preview" width="100%" autoplay muted></video>
+			  <div id="startButton" class="button">Start</div>
+				<div id="stopButton" class="button">
+				Stop
+			  </div>
+			</div>
+			<div id="recorded-content" style="display:none;">
+			  <h2>Enregistrement</h2>
+			  <video id="recording" width="100%" controls></video>
+			  <a id="downloadButton" class="button">
+				Download
+			  </a>
+				<form method="post" action="send.php">
+					<label for="mail">Adresse à laquelle envoyer le message dans X temps :</label>
+					<input type"email" name="email" required />
+					<label for="nom">Votre nom :</label>
+					<input type ="text" name="nom" required/>
+					<label for="prenom">Votre prénom: </label>
+					<input type="text" name="prenom" required />
+					<input type="submit">Envoyer votre message</input>
+				</form>
+			</div>
 		 <div class="bottom">
 			<pre id="log"></pre>
+
 		 </div>
 	 </div>
 	</body>
 	<script>
+
 	let preview = document.getElementById("preview");
 	let recording = document.getElementById("recording");
+	let prevContent = document.getElementById("preview-content");
+	let recContent = document.getElementById("recorded-content")
 	let startButton = document.getElementById("startButton");
 	let stopButton = document.getElementById("stopButton");
 	let downloadButton = document.getElementById("downloadButton");
 	let logElement = document.getElementById("log");
-	let recordingTimeMS = 300000;
+	let recordingTimeMS = 60000;
 
-	function log(msg) {
+		function log(msg) {
 	logElement.innerHTML += msg + "\n";
 	}
 
@@ -50,7 +67,7 @@
 
 	 recorder.ondataavailable = event => data.push(event.data);
 	 recorder.start();
-	 log(recorder.state + " : Enregistrement pendant " + (lengthInMS/60000) + " minutes...");
+	 log("Enregistrement pendant " + (lengthInMS/1000) + " secondes...");
 
 	let stopped = new Promise((resolve, reject) => {
     recorder.onstop = resolve;
@@ -86,8 +103,8 @@
 	}).then(() => startRecording(preview.captureStream(), recordingTimeMS))
 	.then (recordedChunks => {
     let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-		recording.style = "display:inline-block";
-		preview.style = "display:none;"
+		recContent.style = "display:inline-block";
+		prevContent.style = "display:none;"
     recording.src = URL.createObjectURL(recordedBlob);
     downloadButton.href = recording.src;
     downloadButton.download = "RecordedVideo.webm";

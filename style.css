@@ -24,7 +24,7 @@ video {
 .button {
   cursor: pointer;
   display: block;
-  width: 160px;
+  width: 100%;
   font-size: 16px;
   text-align: center;
   padding-top: 2px;
