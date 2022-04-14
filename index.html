@@ -32,7 +32,7 @@
 					<input type ="text" name="nom" required/>
 					<label for="prenom">Votre prénom: </label>
 					<input type="text" name="prenom" required />
-					<input type="submit">Envoyer votre message</input>
+					<input type="submit" value="Envoyer votre message"></input>
 				</form>
 			</div>
 		 <div class="bottom">
@@ -51,7 +51,7 @@
 	let stopButton = document.getElementById("stopButton");
 	let downloadButton = document.getElementById("downloadButton");
 	let logElement = document.getElementById("log");
-	let recordingTimeMS = 60000;
+	let recordingTimeMS = 6000;
 
 		function log(msg) {
 	logElement.innerHTML += msg + "\n";
@@ -88,7 +88,7 @@
 	function stop(stream) {
 	stream.getTracks().forEach(track => track.stop());
 
-	log("Enregistrement terminé. Formatage de la vidéo (veuillez patienter)...");
+	log("Enregistrement terminé. Formatage de la vidéo (veuillez patienter)... (Environ" + (lengthInMS/1000) + " secondes...");
 	}
 
 	startButton.addEventListener("click", function() {
